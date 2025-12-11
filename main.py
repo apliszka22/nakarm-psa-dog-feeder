@@ -1,3 +1,5 @@
+import random
+
 import feed_dog
 from find_dog import find_dog_by_name
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -5,8 +7,9 @@ import logging
 from datetime import datetime
 
 # Constants
-TIMES_TO_FEED = 1000
-DELAY = 1
+MIN_DELAY = 1.0
+MAX_DELAY = 2.5
+TIMES_TO_FEED = 10000
 HEADLESS = True
 
 # Set up logging to both file and console
@@ -51,8 +54,8 @@ for name in dog_names:
 
 # Define feeding tasks
 feeding_tasks = [
-    {"dog_name": "piorun", "num_feeds": TIMES_TO_FEED, "delay": DELAY, "headless": HEADLESS},
-    {"dog_name": "azorek", "num_feeds": TIMES_TO_FEED, "delay": DELAY, "headless": HEADLESS}
+    {"dog_name": "piorun", "num_feeds": TIMES_TO_FEED, "delay": random.uniform(MIN_DELAY, MAX_DELAY), "headless": HEADLESS},
+    {"dog_name": "azorek", "num_feeds": TIMES_TO_FEED, "delay": random.uniform(MIN_DELAY, MAX_DELAY), "headless": HEADLESS}
 ]
 
 logger.info("Starting concurrent feeding tasks")
