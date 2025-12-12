@@ -1,5 +1,4 @@
 import random
-
 import feed_dog
 from find_dog import find_dog_by_name
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -8,8 +7,8 @@ from datetime import datetime
 
 # Constants
 MIN_DELAY = 1.0
-MAX_DELAY = 2.5
-TIMES_TO_FEED = 10000
+MAX_DELAY = 2.0
+TIMES_TO_FEED = 5000
 HEADLESS = True
 
 # Set up logging to both file and console
@@ -38,7 +37,7 @@ logger.addHandler(console_handler)
 
 logger.info("Starting dog feeding process")
 
-dog_names = ["Piorun", "Azorek"]
+dog_names = ["Piorun", "Azorek", "Feniks", "Amadeo"]
 for name in dog_names:
     dog = find_dog_by_name(name)
     if dog:
@@ -52,16 +51,23 @@ for name in dog_names:
     else:
         logger.warning(f"Dog '{name}' not found")
 
-# Define feeding tasks
+
+# Generate feeding tasks automatically from dog_names
 feeding_tasks = [
-    {"dog_name": "piorun", "num_feeds": TIMES_TO_FEED, "delay": random.uniform(MIN_DELAY, MAX_DELAY), "headless": HEADLESS},
-    {"dog_name": "azorek", "num_feeds": TIMES_TO_FEED, "delay": random.uniform(MIN_DELAY, MAX_DELAY), "headless": HEADLESS}
+    {
+        "dog_name": name.lower(),
+        "num_feeds": TIMES_TO_FEED,
+        "delay": random.uniform(MIN_DELAY, MAX_DELAY),
+        "headless": HEADLESS
+    }
+    for name in dog_names
 ]
+
 
 logger.info("Starting concurrent feeding tasks")
 
 # Run all tasks concurrently
-with ThreadPoolExecutor(max_workers=2) as executor:
+with ThreadPoolExecutor(max_workers=len(dog_names)) as executor:
     futures = {executor.submit(feed_dog.feed_dog, **task): task['dog_name'] for task in feeding_tasks}
 
     for future in as_completed(futures):

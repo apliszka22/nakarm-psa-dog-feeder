@@ -86,7 +86,7 @@ def find_dog_by_name(dog_name: str) -> Optional[Dict[str, str]]:
 
 if __name__ == "__main__":
     # Test the function
-    dog_names = ["Piorun", "Azorek"]
+    dog_names = ["Piorun", "Azorek", "Feniks"]
 
     for name in dog_names:
         dog = find_dog_by_name(name)
